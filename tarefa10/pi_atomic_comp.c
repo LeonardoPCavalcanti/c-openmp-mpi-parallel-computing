@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <omp.h>
+#include <time.h>
+
+static const long DEFAULT_N = 100000000L;
+
+int main(int argc, char **argv) {
+    long N = (argc > 1) ? atoll(argv[1]) : DEFAULT_N;
+    long pontos_no_circulo = 0;
+
+    printf("[V2] Compartilhado + atomic | N = %ld\n", N);
+    double t0 = omp_get_wtime();
+
+    #pragma omp parallel
+    {
+        unsigned int seed = (unsigned int)(time(NULL) ^ (0x9e3779b9u * (omp_get_thread_num()+1)));
+        #pragma omp for
+        for (long i = 0; i < N; i++) {
+            double x = (double)rand_r(&seed) / RAND_MAX * 2.0 - 1.0;
+            double y = (double)rand_r(&seed) / RAND_MAX * 2.0 - 1.0;
+            if (x*x + y*y < 1.0) {
+                #pragma omp atomic
+                pontos_no_circulo++;
+            }
+        }
+    }
+
+    double t1 = omp_get_wtime();
+    double pi = 4.0 * (double)pontos_no_circulo / (double)N;
+    printf("Pi = %.8f | tempo = %.6f s\n", pi, t1 - t0);
+    return 0;
+}

@@ -1,0 +1,48 @@
+// pi_rand_vector.c
+// gcc -O2 -fopenmp pi_rand_vector.c -o pi_rand_vector
+// ./pi_rand_vector [N]
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <omp.h>
+
+static inline double rnd01_rand(void) {
+    return (double)rand() / (double)RAND_MAX;
+}
+
+int main(int argc, char **argv) {
+    const long long N = (argc > 1) ? atoll(argv[1]) : 10000000LL;
+
+    const int maxT = omp_get_max_threads();
+    long long *hits = (long long*)calloc((size_t)maxT, sizeof(long long));
+    if (!hits) { fprintf(stderr, "Falha ao alocar hits.\n"); return 1; }
+
+    double t0 = omp_get_wtime();
+
+    #pragma omp parallel
+    {
+        const int T   = omp_get_num_threads();
+        const int tid = omp_get_thread_num();
+
+        long long in_local = 0;
+        for (long long i = tid; i < N; i += T) {
+            double x = rnd01_rand();
+            double y = rnd01_rand();
+            if (x*x + y*y <= 1.0) in_local++;
+        }
+        hits[tid] = in_local;   // sem critical
+    }
+
+    long long total_in = 0;
+    for (int t = 0; t < maxT; t++) total_in += hits[t];
+
+    double pi = 4.0 * (double)total_in / (double)N;
+    double t1 = omp_get_wtime();
+
+    printf("[rand  + vetor   ] N=%lld | pi=%.6f | tempo=%.6f s\n",
+       N, pi, (t1 - t0));
+
+
+    free(hits);
+    return 0;
+}

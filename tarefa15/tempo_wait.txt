@@ -1,0 +1,4 @@
+Versão Não-Bloqueante (Wait): Tempo de execução = 2.032453 segundos
+Versão Não-Bloqueante (Wait): Tempo de execução = 1.444240 segundos
+Versão Não-Bloqueante (Wait): Tempo de execução = 0.923057 segundos
+Versão Não-Bloqueante (Wait): Tempo de execução = 0.523201 segundos

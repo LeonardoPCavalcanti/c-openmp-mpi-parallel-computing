@@ -1,0 +1,4 @@
+Versão Não-Bloqueante (Test): Tempo de execução = 1.939952 segundos
+Versão Não-Bloqueante (Test): Tempo de execução = 1.317126 segundos
+Versão Não-Bloqueante (Test): Tempo de execução = 0.930879 segundos
+Versão Não-Bloqueante (Test): Tempo de execução = 0.474062 segundos

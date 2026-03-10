@@ -1,0 +1,4 @@
+Versão Bloqueante: Tempo de execução = 2.277800 segundos
+Versão Bloqueante: Tempo de execução = 1.941787 segundos
+Versão Bloqueante: Tempo de execução = 1.154968 segundos
+Versão Bloqueante: Tempo de execução = 0.620669 segundos
